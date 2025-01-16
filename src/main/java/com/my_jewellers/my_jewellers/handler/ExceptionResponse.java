@@ -22,6 +22,4 @@ public class ExceptionResponse {
     private Map<String, String> errors;
 
 
-
-
 }

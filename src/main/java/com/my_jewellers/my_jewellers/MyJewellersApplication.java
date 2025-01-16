@@ -13,16 +13,16 @@ import com.my_jewellers.my_jewellers.role.RoleRepository;
 @EnableJpaAuditing
 public class MyJewellersApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MyJewellersApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MyJewellersApplication.class, args);
+    }
 
-	@Bean
-	public CommandLineRunner runner(RoleRepository roleRepository) {
-		return args -> {
-			if (roleRepository.findRoleByRoleName("USER").isEmpty()) {
-				roleRepository.save(Role.builder().roleName("USER").build());
-			}
-		};
-	}
+    @Bean
+    public CommandLineRunner runner(RoleRepository roleRepository) {
+        return args -> {
+            if (roleRepository.findRoleByRoleName("USER").isEmpty()) {
+                roleRepository.save(Role.builder().roleName("USER").build());
+            }
+        };
+    }
 }

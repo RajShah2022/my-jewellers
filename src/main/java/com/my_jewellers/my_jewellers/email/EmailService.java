@@ -30,7 +30,7 @@ public class EmailService {
             String emailSubject
     ) throws MessagingException {
         String templateName;
-        if(emailTemplate == null){
+        if (emailTemplate == null) {
             templateName = "confirm-email";
         } else {
             templateName = emailTemplate.name();

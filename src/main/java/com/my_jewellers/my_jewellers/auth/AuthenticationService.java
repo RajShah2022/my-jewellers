@@ -98,7 +98,7 @@ public class AuthenticationService {
         StringBuilder codeBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
 
-        for (int i=0; i<length;i++){
+        for (int i = 0; i < length; i++) {
             int randomIndex = secureRandom.nextInt(characters.length());
             codeBuilder.append(characters.charAt(randomIndex));
 
@@ -114,7 +114,7 @@ public class AuthenticationService {
                 )
         );
         var claims = new HashMap<String, Object>();
-        var user = ((User)auth.getPrincipal());
+        var user = ((User) auth.getPrincipal());
         claims.put("fullName", user.getFullName());
         var jwtToken = jwtService.generateToken(claims, user);
         return AuthenticationResponse.builder().token(jwtToken).build();
@@ -123,8 +123,8 @@ public class AuthenticationService {
     @Transactional
     public void activateAccount(String token) throws MessagingException {
         Token savedToken = tokenRepository.findByToken(token)
-                .orElseThrow(()-> new RuntimeException("Invalid Token"));
-        if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())){
+                .orElseThrow(() -> new RuntimeException("Invalid Token"));
+        if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
             throw new RuntimeException("Activation Token has expired, New Token has been sent");
         }
