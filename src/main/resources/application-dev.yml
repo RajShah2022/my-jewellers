@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
     host: localhost
-    post: 1025
+    port: 1025
     username: ali
     password: ali
     properties:
