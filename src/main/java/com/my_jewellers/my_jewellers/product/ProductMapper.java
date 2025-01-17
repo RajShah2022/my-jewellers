@@ -22,8 +22,15 @@ import java.util.List;
 @Slf4j
 public class ProductMapper {
 
+    @Value("${application.file.links}")
+    private String fileLinks;
+
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+
+    private List<String> getImageLinks(Product product) {
+        return product.getImageList().stream().map(image -> fileLinks + image.getId()).toList();
+    }
 
     public Product toProduct(@Valid ProductRequest request) {
         Product product = new Product();
@@ -61,6 +68,7 @@ public class ProductMapper {
                 .id(product.getId())
                 .productName(product.getProductName())
                 .descriptionList(toDescListResponse(product.getDescriptionList()))
+                .fileLinks(getImageLinks(product))
                 .build();
     }
 

@@ -14,4 +14,5 @@ public class ProductResponse {
     private Integer id;
     private String productName;
     private List<DescriptionResponse> descriptionList;
+    private List<String> fileLinks;
 }
