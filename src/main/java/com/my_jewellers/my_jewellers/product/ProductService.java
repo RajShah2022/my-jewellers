@@ -57,11 +57,11 @@ public class ProductService {
         productRepository.deleteById(product.getId());
     }
 
-    public PageResponse<ProductResponse> findAllProducts(Integer page, Integer size) {
+    public PageResponse<ProductSnippetResponse> findAllProducts(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
         Page<Product> products = productRepository.findAll(pageable);
-        List<ProductResponse> productResponse = products.stream()
-                .map(productMapper::toProductResponse)
+        List<ProductSnippetResponse> productResponse = products.stream()
+                .map(productMapper::toProductSnippetResponse)
                 .toList();
         return new PageResponse<>(
                 productResponse,
@@ -74,66 +74,9 @@ public class ProductService {
         );
     }
 
-    public ProductResponse findProductById(Integer productId) {
+    public ProductDetailResponse findProductById(Integer productId) {
         return productRepository.findById(productId)
-                .map(productMapper::toProductResponse)
+                .map(productMapper::toProductDetailResponse)
                 .orElseThrow(() -> new EntityNotFoundException("No product found with ID:: " + productId));
     }
-
-//    public Product saveProductWithMultipleDescAndCategories() {
-//
-//        // Create Product
-//        Product product = new Product();
-//        product.setProductName("Jewelry Set");
-//
-//
-//        // Create Categories
-//        Category category1 = new Category();
-//        category1.setCategoryName("Gold");
-//        category1.setPriceRate(59F);
-//        category1.setCreatedBy(0);
-//
-//        Category category2 = new Category();
-//        category2.setCategoryName("Silver");
-//        category2.setPriceRate(29F);
-//        category2.setCreatedBy(0);
-//
-//        // Create Descriptions
-//        Description desc1 = new Description();
-//        desc1.setDescriptionName("2 grams");
-//        desc1.setQuantity(2F);
-//        desc1.setUnits("grams");
-//        desc1.setCreatedBy(0);
-//
-//        Description desc2 = new Description();
-//        desc2.setDescriptionName("4 grams");;
-//        desc2.setQuantity(4F);
-//        desc2.setCreatedBy(0);
-//
-////        Category savedCategory1 = categoryRepository.save(category1);
-////        Category savedCategory2 = categoryRepository.save(category2);
-//
-//        desc1.setCategory(category1);
-//        desc2.setCategory(category2);
-//
-////        Description savedDesc1 = descriptionRepository.save(desc1);
-////        Description savedDesc2 = descriptionRepository.save(desc2);
-////        // Add to map: Desc -> Category
-////        product.getDescCategoryMap().put(savedDesc1, savedCategory1); // 2 grams -> Gold
-////        product.getDescCategoryMap().put(savedDesc2, savedCategory2); // 4 grams -> Silver
-//        product.setCreatedBy(0);
-//
-//        List<Description> descriptionList = new ArrayList<Description>();
-//
-//
-//        descriptionList.add(desc1);
-//        descriptionList.add(desc2);
-////        descriptionList.add(savedDesc1);
-////        descriptionList.add(savedDesc2);
-//        product.setDescriptionList(descriptionList);
-//
-//        // Save Product
-//        return productRepository.save(product);
-//    }
-
 }

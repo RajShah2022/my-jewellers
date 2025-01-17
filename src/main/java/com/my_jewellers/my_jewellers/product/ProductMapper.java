@@ -6,7 +6,6 @@ import com.my_jewellers.my_jewellers.category.CategoryRepository;
 import com.my_jewellers.my_jewellers.description.Description;
 import com.my_jewellers.my_jewellers.description.DescriptionRequest;
 import com.my_jewellers.my_jewellers.description.DescriptionResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -63,12 +62,21 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductResponse toProductResponse(Product product) {
-        return ProductResponse.builder()
+    public ProductDetailResponse toProductDetailResponse(Product product) {
+        return ProductDetailResponse.builder()
                 .id(product.getId())
                 .productName(product.getProductName())
                 .descriptionList(toDescListResponse(product.getDescriptionList()))
                 .fileLinks(getImageLinks(product))
+                .build();
+    }
+
+
+    public ProductSnippetResponse toProductSnippetResponse(Product product) {
+        return ProductSnippetResponse.builder()
+                .id(product.getId())
+                .productName(product.getProductName())
+                .image(!getImageLinks(product).isEmpty() ? getImageLinks(product).get(0): null)
                 .build();
     }
 

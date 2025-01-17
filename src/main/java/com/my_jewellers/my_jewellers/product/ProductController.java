@@ -48,7 +48,7 @@ public class ProductController {
 
 
     @PostMapping("/findAllProducts")
-    public ResponseEntity<PageResponse<ProductResponse>> findAllProducts(
+    public ResponseEntity<PageResponse<ProductSnippetResponse>> findAllProducts(
             @RequestBody @Valid PageRequest request
     ) {
         return ResponseEntity.ok(service.findAllProducts(request.page(), request.size()));
@@ -56,7 +56,7 @@ public class ProductController {
 
 
     @PostMapping("/findProductById")
-    public ResponseEntity<ProductResponse> findProductById(
+    public ResponseEntity<ProductDetailResponse> findProductById(
             @RequestBody @Valid ProductIdRequest request
     ) {
         return ResponseEntity.ok(service.findProductById(request.id()));
