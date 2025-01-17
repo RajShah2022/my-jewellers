@@ -2,6 +2,7 @@ package com.my_jewellers.my_jewellers.image;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,8 @@ public class ImageController {
     @GetMapping("/download/{id}")
     public ResponseEntity<?> downloadImage(@PathVariable Integer id) {
         byte[] imageData = service.getImage(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf(IMAGE_PNG_VALUE))
-                .body(imageData);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG); // Ensure correct content type
+        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
     }
 }

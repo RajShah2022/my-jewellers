@@ -43,7 +43,7 @@ application:
   file:
     uploads:
       photos-output-path: ./uploads
-    links: http://localhost:8088/api/v1/images/download/
+    links: http://10.0.2.2:8088/api/v1/images/download/
 
 server:
   port: 8088
