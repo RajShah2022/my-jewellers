@@ -1,6 +1,5 @@
 package com.my_jewellers.my_jewellers.config;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,7 @@ public class BeansConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public AuthenticationProvider authenticationProvider (){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
@@ -40,7 +39,7 @@ public class BeansConfig {
     }
 
     @Bean
-    public AuditorAware<Integer> auditorAware (){
+    public AuditorAware<Integer> auditorAware() {
         return new ApplicationAuditAware();
     }
 }
