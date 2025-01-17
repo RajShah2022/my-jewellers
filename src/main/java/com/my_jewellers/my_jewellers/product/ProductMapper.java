@@ -6,10 +6,12 @@ import com.my_jewellers.my_jewellers.category.CategoryRepository;
 import com.my_jewellers.my_jewellers.description.Description;
 import com.my_jewellers.my_jewellers.description.DescriptionRequest;
 import com.my_jewellers.my_jewellers.description.DescriptionResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,42 +26,33 @@ public class ProductMapper {
     private final CategoryMapper categoryMapper;
 
     public Product toProduct(@Valid ProductRequest request) {
+        Product product = new Product();
+        product.setId(request.id());
+        product.setProductName(request.productName());
+        product.setDescriptionList(toDescList(request.descriptionList(), product));
+        return product;
+    }
+
+    public List<Description> toDescList(List<DescriptionRequest> descriptionRequests, Product product) {
+
         List<Description> newDescriptionList = new ArrayList<>();
-        for (DescriptionRequest descriptionRequest : request.descriptionList()) {
-            Category savedCategory = categoryRepository.findById(descriptionRequest.categoryId())
-                    .orElseThrow(() -> new EntityNotFoundException("No Category found with ID:: " + descriptionRequest.categoryId()));
-            newDescriptionList.add(
-                    Description.builder()
-                            .id(descriptionRequest.id())
-                            .descriptionName(descriptionRequest.descriptionName())
-                            .units(descriptionRequest.units())
-                            .quantity(descriptionRequest.quantity())
-                            .categoryId(descriptionRequest.categoryId())
-//                            .category(savedCategory)
-                            .build()
-            );
+        for (DescriptionRequest descriptionRequest : descriptionRequests) {
+            newDescriptionList.add(toDescription(descriptionRequest, product));
         }
-        return Product.builder()
-                .id(request.id())
-                .productName(request.productName())
-                .descriptionList(newDescriptionList)
-                .build();
+        return newDescriptionList;
     }
 
-    public List<Description> toDescList(List<DescriptionRequest> descriptionRequests) {
-        return descriptionRequests.stream().map(this::toDescription).toList();
-    }
-
-    public Description toDescription(DescriptionRequest descriptionRequest) {
+    public Description toDescription(DescriptionRequest descriptionRequest, Product product) {
         Category savedCategory = categoryRepository.findById(descriptionRequest.categoryId())
                 .orElseThrow(() -> new EntityNotFoundException("No Category found with ID:: " + descriptionRequest.categoryId()));
 
         return Description.builder()
                 .id(descriptionRequest.id())
+                .descriptionName(descriptionRequest.descriptionName())
                 .quantity(descriptionRequest.quantity())
                 .units(descriptionRequest.units())
-                .categoryId(descriptionRequest.categoryId())
-//                .category(savedCategory)
+                .product(product)
+                .category(savedCategory)
                 .build();
     }
 
@@ -81,8 +74,7 @@ public class ProductMapper {
                 .descriptionName(description.getDescriptionName())
                 .quantity(description.getQuantity())
                 .units(description.getUnits())
-                .categoryId(description.getCategoryId())
-//                .category(categoryMapper.toCategoryResponse(description.getCategory()))
+                .categoryId(description.getCategory().getId())
                 .build();
     }
 }

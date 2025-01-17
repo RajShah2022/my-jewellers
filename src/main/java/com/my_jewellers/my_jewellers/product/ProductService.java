@@ -42,7 +42,7 @@ public class ProductService {
         Product product = productRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("No Product found with ID:: " + request.id()));
         product.setProductName(request.productName());
-        product.setDescriptionList(productMapper.toDescList(request.descriptionList()));
+        product.setDescriptionList(productMapper.toDescList(request.descriptionList(), product));
         return productRepository.save(product).getId();
     }
 
